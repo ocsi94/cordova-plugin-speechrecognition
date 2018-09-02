@@ -281,6 +281,12 @@ public class SpeechRecognition extends CordovaPlugin {
     public void onError(int errorCode) {
       String errorMessage = getErrorText(errorCode);
       Log.d(LOG_TAG, "Error: " + errorMessage);
+      
+      // HACK: We swallow these two errors as they're popping up in non-critical situations:
+      if (errorCode == SpeechRecognizer.ERROR_SPEECH_TIMEOUT || errorCode == SpeechRecognizer.ERROR_CLIENT) {
+        return;
+      }
+      
       callbackContext.error(errorMessage);
     }
 
