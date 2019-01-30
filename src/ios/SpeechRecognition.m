@@ -17,6 +17,8 @@
 #define MESSAGE_ACCESS_DENIED_MICROPHONE @"User denied access to microphone"
 #define MESSAGE_ONGOING @"Ongoing speech recognition"
 
+#define RESULT_NOT_DETECTED 203
+
 @interface SpeechRecognition()
 
 @property (strong, nonatomic) SFSpeechRecognizer *speechRecognizer;
@@ -125,6 +127,9 @@
                 self.recognitionRequest = nil;
                 self.recognitionTask = nil;
 
+                // HACK: We swallow this generic error code as this is popping up in a non-critical situation:
+                if (error.code == RESULT_NOT_DETECTED) return;
+
                 CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
                 if (showPartial){
                     [pluginResult setKeepCallbackAsBool:YES];
@@ -159,8 +164,10 @@
         NSLog(@"stopListening()");
 
         if ( self.audioEngine.isRunning ) {
+            [self.audioEngine.inputNode removeTapOnBus:0];
             [self.audioEngine stop];
             [self.recognitionRequest endAudio];
+            self.recognitionRequest = nil;
         }
 
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
