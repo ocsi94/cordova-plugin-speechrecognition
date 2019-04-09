@@ -18,6 +18,7 @@
 #define MESSAGE_ONGOING @"Ongoing speech recognition"
 
 #define RESULT_NOT_DETECTED 203
+#define LISTENING_TRIGGER_SPAMMED 209
 
 @interface SpeechRecognition()
 
@@ -127,8 +128,8 @@
                 self.recognitionRequest = nil;
                 self.recognitionTask = nil;
 
-                // HACK: We swallow this generic error code as this is popping up in a non-critical situation:
-                if (error.code == RESULT_NOT_DETECTED) return;
+                // HACK: We swallow these two errors as they're popping up in non-critical situations:
+                if (error.code == RESULT_NOT_DETECTED || error.code == LISTENING_TRIGGER_SPAMMED) return;
 
                 CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
                 if (showPartial){
