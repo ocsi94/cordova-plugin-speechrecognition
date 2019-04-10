@@ -164,6 +164,11 @@ public class SpeechRecognition extends CordovaPlugin {
   private void startListening(String language, int matches, String prompt, final Boolean showPartial, Boolean showPopup) {
     Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPartial: " + showPartial + ", showPopup: " + showPopup);
 
+    // Cancel the previous speech recognition task if it exists.
+    if(recognizer != null) {
+      recognizer.cancel();
+    }
+
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
