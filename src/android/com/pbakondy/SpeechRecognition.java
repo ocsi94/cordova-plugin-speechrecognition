@@ -294,7 +294,7 @@ public class SpeechRecognition extends CordovaPlugin {
       // HACK: Swallow the `ERROR_RECOGNIZER_BUSY` non-critical error and we need to cancel the
       //   previous speech recognition trask if it exists:
       if (errorCode == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
-        if(recognizer != null) {
+        if (recognizer != null) {
           recognizer.cancel();
         }
         return;
