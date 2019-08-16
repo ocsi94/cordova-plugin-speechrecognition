@@ -168,6 +168,7 @@
             [self.audioEngine.inputNode removeTapOnBus:0];
             [self.audioEngine stop];
             [self.recognitionRequest endAudio];
+            [self.recognitionTask cancel];
             self.recognitionRequest = nil;
         }
 
