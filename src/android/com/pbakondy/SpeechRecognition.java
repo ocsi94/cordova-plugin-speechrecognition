@@ -167,7 +167,12 @@ public class SpeechRecognition extends CordovaPlugin {
     // Cancel the previous speech recognition task if it exists.
     if(recognizer != null) {
       Log.d(LOG_TAG, "startListening() canceling previous speech recognition task...");
-      recognizer.cancel();
+      view.post(new Runnable() {
+        @Override
+        public void run() {
+          recognizer.stopListening();
+        }
+      });
     }
 
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
